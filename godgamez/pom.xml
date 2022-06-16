@@ -1,0 +1,97 @@
+<project xmlns='http://maven.apache.org/POM/4.0.0'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 
+  		http://maven.apache.org/maven-v4_0_0.xsd'>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>songjeongwoo</groupId>
+	<artifactId>godgamez</artifactId>
+	<packaging>war</packaging> <!-- webapp에선 war파일로 패키징한다(약속). -->
+	<version>0.0.1-SNAPSHOT</version>
+	<name>spring.web Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	
+	<properties>
+		<spring.ver>5.3.4</spring.ver>
+	</properties>
+	
+	<dependencies>
+		<dependency> 
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.ver}</version> <!-- 확장성을 위해 EL로 표시 -->
+			<!-- <scope>의 디폴트는 compile이다. -->
+		</dependency>
+		<dependency> <!-- 앱에서 servlet을 쓰기 위한 dependency, 이게 없을 경우 *.jsp에서 컴파일에러 발생 -->
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope> <!-- compile동안 쓰고 runtime 시에는 WAS의 servlet lib(dependency)를 쓰겠다. -->
+		</dependency>
+		<dependency> <!--lombok lib -->
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.18</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency> <!-- 액션태그 c, jstl lib -->
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency> <!-- mybatis-spring -->
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>2.0.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId> <!-- jdbc: DB연결관련 -->
+			<version>${spring.ver}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.8.0.0</version>
+		</dependency>
+		<dependency> <!-- hibernate-validator -->
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.1.5.Final</version>
+		</dependency>
+		<dependency> <!--(ajax를 위한)json -->
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.11.1</version>
+		</dependency>
+		<dependency> <!-- 첨부파일 -->
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.7</version>
+		</dependency>
+		<dependency> <!-- 메일 -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.ver}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+	</dependencies>
+</project>

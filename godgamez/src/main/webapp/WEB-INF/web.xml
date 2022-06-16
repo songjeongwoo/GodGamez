@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<web-app xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
+	xmlns='http://xmlns.jcp.org/xml/ns/javaee' 
+	xsi:schemaLocation='http://xmlns.jcp.org/xml/ns/javaee 
+	http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd' version='3.1'>	
+	<servlet>
+		<servlet-name>dispatcher</servlet-name> <!-- servlet으로서 http통신을 주로 담당하고, 이는 결국 Spring Container이다. -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name> <!-- Spring Container, 즉 spring.core모듈과 달리 직접 Container를 만들 필요가 없다. -->
+			<!-- configuration Class(즉, AppConfig클래스 파일)를 읽게 해준다. -->
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name> <!-- Spring Container가 사용할 AppConfig --> 
+			<param-value>songjeongwoo.godgamez.config.AppConfig</param-value> <!-- Config(설정) Class파일 위치를 적는다. -->
+		</init-param>
+		<!-- 선택사항으로, servlet 생성의 우선순위를 요청한다. 단, 요청대로 할 지는 Tomcat의 선택 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<!-- context path 후 패턴을 "/"로 해서 default servlet으로 갈 url을 가로챈다. -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<filter> <!-- request를 필터링해서 encoding한다. -->
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping> <!-- 필터에 필터링할 url을 알려준다. -->
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern> <!--  context path 후 "/"로 시작하는 request 전부를 뜻한다. -->
+	</filter-mapping>
+</web-app>
