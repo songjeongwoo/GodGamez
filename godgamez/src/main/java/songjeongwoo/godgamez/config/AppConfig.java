@@ -27,5 +27,8 @@ public class AppConfig implements WebMvcConfigurer {
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("main");
+		
+		registry.addViewController("/guide/aboutUs").setViewName("guide/aboutUs");
+		registry.addViewController("/guide/tos").setViewName("guide/tos");
 	}
 }
