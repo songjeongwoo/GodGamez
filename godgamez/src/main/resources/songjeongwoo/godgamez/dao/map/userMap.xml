@@ -6,4 +6,24 @@
 		insert into users(user_code, position, user_id, password, user_name, nickname, birthday, phone_num, user_level, gold, reg_date)
         values(usrs_usrcode_seq.nextval, #{position}, #{usrId}, #{usrPw}, #{usrName}, #{nickname}, #{birthday}, #{phoneNum}, 0, 0, sysdate)
 	</insert>
+	
+	<select id='selectUserById' resultMap='userMap'>
+		select * from users
+		where user_id = #{usrId}
+	</select>
+	
+	<resultMap id="userMap" type="user">
+      <id     property="usrCode" 		column="user_code"/>
+      <result property="position" 		column="position"/>
+      <result property="usrId" 			column="user_id"/>
+      <result property="usrPw" 			column="password"/>
+      <result property="usrName" 		column="user_name"/>
+      <result property="nickname" 		column="nickname"/>
+      <result property="birthday" 		column="birthday"/>
+      <result property="phoneNum" 		column="phone_num"/>
+      <result property="usrLv" 			column="user_level"/>
+      <result property="gold" 			column="gold"/>
+      <result property="regDate" 		column="reg_date"/>
+      <result property="usrIcon"		column="user_icon"/>
+   </resultMap>
 </mapper>

@@ -28,11 +28,16 @@ public class AppConfig implements WebMvcConfigurer {
 	public void addViewControllers(ViewControllerRegistry registry) {
 		registry.addViewController("/").setViewName("main");
 		
+		/* 소개 & 약관 */
 		registry.addViewController("/guide/aboutUs").setViewName("guide/aboutUs");
 		registry.addViewController("/guide/tos").setViewName("guide/tos");
-
+		
+		/* 회원가입 */
 		registry.addViewController("/user/join/step1").setViewName("user/addUserChk");
 		registry.addViewController("/user/join/step2").setViewName("user/addUserIn");
 		registry.addViewController("/user/join/step3").setViewName("user/addUserOut");
+		
+		/* 로그인 */
+		registry.addViewController("/user/login").setViewName("user/login");
 	}
 }
