@@ -1,5 +1,6 @@
 package songjeongwoo.godgamez.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User loginCheck(Map<String, String> loginMap) {
 		return userDao.loginCheck(loginMap);
+	}
+	
+	/* admin */
+	@Override
+	public List<User> getUsers(Map<String, String> positionMap) {
+		return userDao.selectUsers(positionMap);
+	}
+	
+	@Override
+	public User getUser(Map<String, String> getMap) {
+		return userDao.selectUser(getMap);
+	}
+	
+	@Override
+	public boolean patchUser(User user) {
+		return userDao.patchUser(user) > 0;
 	}
 }

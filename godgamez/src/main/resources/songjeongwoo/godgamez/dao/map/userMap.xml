@@ -12,6 +12,55 @@
 		where user_id = #{usrId}
 	</select>
 	
+	<!-- admin - 포지션 별 유저 리스트 소환 -->
+	<!-- 모든 회원들 -->
+	<select id='selectPlayers' resultMap='userMap'>
+		select * from users
+		where position in('NOOB', 'PLAYER', 'OUT')
+		order by user_code desc
+	</select>
+	
+	<!-- 신규가입회원들 (메일인증 안받은) -->
+	<select id='selectNoobs' resultMap='userMap'>
+		select * from users
+		where position = 'NOOB'
+		order by reg_date desc
+	</select>
+	
+	<!-- 탈퇴 신청 회원들 -->
+	<select id='selectOutPlayers' resultMap='userMap'>
+		select * from users
+		where position = 'OUT'
+		order by user_code desc
+	</select>
+	
+	<select id='selectGms' resultMap='userMap'>
+		select * from users
+		where position = 'GM'
+		order by user_code desc
+	</select>
+	
+	<select id='selectUserByCode' resultMap='userMap'>
+		select * from users
+		where user_code = #{usrCode}
+	</select>
+	
+	<select id='selectUserByPhonenum' resultMap='userMap'>
+		select * from users
+		where nickname = #{phoneNum}
+	</select>
+	
+	<select id='selectUserByNick' resultMap='userMap'>
+		select * from users
+		where nickname = #{nickname}
+	</select>
+	
+	<update id='patchUser'>
+		update users
+		set position = #{position}, user_level = #{usrLv}, gold = #{gold}
+		where user_code = #{usrCode}
+	</update>
+	
 	<resultMap id="userMap" type="user">
       <id     property="usrCode" 		column="user_code"/>
       <result property="position" 		column="position"/>

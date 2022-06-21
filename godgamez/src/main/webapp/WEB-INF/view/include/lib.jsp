@@ -11,5 +11,5 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Gothic&display=swap" rel="stylesheet">
 <link rel='stylesheet' href='<c:url value="/res/style.css"/>'/>
-<!-- <script src='<c:url value="/res/script.js"/>'></script> -->
+<script src='<c:url value="/res/script.js"/>'></script>
 <link rel="short icon" href="#">

@@ -39,5 +39,7 @@ public class AppConfig implements WebMvcConfigurer {
 		
 		/* 로그인 */
 		registry.addViewController("/user/login").setViewName("user/login");
+		
+		registry.addViewController("/admin").setViewName("admin/main");
 	}
 }
