@@ -3,9 +3,15 @@
 <%@ include file='../include/lib.jsp' %>
 <script>
 function loginCheck(){
+	localStorage.removeItem('usrId');
+	localStorage.removeItem('usrPw');
+	
 	usrId = $("#usrId").val();
 	usrPw = $("#usrPw").val();
 	saveId = $("#saveId:checked").val();
+	
+	localStorage.setItem("usrId", usrId);
+	localStorage.setItem("usrPw", usrId);
 	
 	if(saveId != null)
 		localStorage.setItem("rememberId", usrId);
