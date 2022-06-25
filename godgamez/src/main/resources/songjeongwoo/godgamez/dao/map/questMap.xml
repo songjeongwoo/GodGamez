@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='songjeongwoo.godgamez.dao.map.QuestMap'>
+	<select id='selectQuests' resultMap='questMap'>
+		<include refid="selectAdminQsts"/>
+		order by q.quest_id
+	</select>
+	
+	<select id='selectStdQuests' resultMap='questMap'>
+		<include refid="selectAdminQsts"/>
+		where c.main_category = '공부'
+		order by q.quest_id
+	</select>
+	
+	<select id='selectExcQuests' resultMap='questMap'>
+		<include refid="selectAdminQsts"/>
+		where c.main_category = '운동'
+		order by q.quest_id
+	</select>
+	
+	<select id='selectQstName' resultMap='questMap'>
+		<include refid="selectAdminQsts"/>
+		where q.quest_name like '%' || #{qstName} || '%'
+		order by q.quest_name
+	</select>
+	
+	<insert id='insertQuest'>
+		insert into quests(quest_id, class_id, quest_name, difficulty, quest_content, image_id)
+        values(qsts_qstId_seq.nextval, #{cls.clsId}, #{qstName}, #{difficulty}, #{qstContent}, #{qstImg})
+	</insert>
+	
+	<select id='selectQstId' resultType='java.lang.Integer'>
+		select qsts_qstid_seq.currval from dual
+	</select>
+	
+	<select id='selectQuest' resultMap='questMap'>
+		<include refid="selectAdminQsts"/>
+		where quest_id = #{qstId}
+	</select>
+	
+	<update id='updateQuest'>
+		update quests
+		set quest_name = #{qstName}, difficulty = #{difficulty}, quest_content = #{qstContent}, image_id = #{qstImg}
+		where quest_id = #{qstId}
+	</update>
+	
+	<delete id='deleteQuest'>
+		delete quests
+		where quest_id = #{qstId}
+	</delete>
+	
+	<sql id="selectAdminQsts">
+		select q.*, c.*
+		from quests q join classes c
+		on q.class_id = c.class_id
+   </sql>
+   
+   <resultMap id="questMap" type="quest">
+		<id     property="qstId" 		column="quest_id"/>
+		<result property="qstName" 		column="quest_name"/>
+		<result property="difficulty" 	column="difficulty"/>
+		<result property="qstContent" 	column="quest_content"/>
+		<result property="qstImg"		column="image_id"/>
+		<association property='cls' resultMap='classMap'/>
+   </resultMap>
+   
+   <resultMap id="classMap"	type="class">
+		<id     property="clsId"	column="class_id"/>
+		<result property="mainCtg"	column="main_category"/>
+		<result property="subCtg"	column="sub_category"/>
+		<result property="clsName"	column="class_name"/>
+   </resultMap>
+</mapper>
