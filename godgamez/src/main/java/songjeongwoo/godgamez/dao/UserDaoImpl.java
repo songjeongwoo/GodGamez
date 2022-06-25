@@ -30,6 +30,11 @@ public class UserDaoImpl implements UserDao {
 			return null;
 	}
 	
+	@Override
+	public int updateUser(User user) {
+		return userMap.updateUser(user);
+	}
+	
 	/* admin */
 	@Override
 	public List<User> selectUsers(Map<String, String> positionMap) {

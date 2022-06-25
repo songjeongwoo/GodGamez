@@ -10,6 +10,8 @@ public interface UserDao {
 	
 	User loginCheck(Map<String, String> loginMap);
 	
+	int updateUser(User user);
+	
 	/* admin */
 	List<User> selectUsers(Map<String, String> positionMap);
 	User selectUser(Map<String, String> getMap);

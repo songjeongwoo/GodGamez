@@ -30,4 +30,6 @@ public class User {
 	
 	@JsonFormat(pattern="yyyy-MM-dd", timezone="Asia/Seoul")	
 	private LocalDate regDate;
+	
+	private String usrIcon;
 }

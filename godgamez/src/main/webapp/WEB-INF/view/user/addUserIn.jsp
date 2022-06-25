@@ -59,39 +59,6 @@ function idChk(job) {
 	} else $('#usrIdChk').empty();
 }
 
-// 비번 체크
-function pwChk(job) {
-	pw = $('#usrPw').val();
-	
-	switch(job) {
-		case 1: msg = '사용'; break;
-		case 2: msg = '조회'; break;
-		case 3: msg = '변경';
-	}
-	
-	if(pw.length) {
-		if(pw.length < 6 || 10 < pw.length || pw.search(/\s/) != -1 || pw.search(/[ㄱ-ㅎㅏ-ㅣ가-힣]/) != -1 
-				|| pw.search(/[0-9]/) < 0 || pw.search(/[a-zA-Z]/) < 0 || pw.search(/[,./~!@#$%^&*()_+=<>?:;{}]/) < 0)
-			$('#usrPwChk').html('<span class="text-danger">' + msg + ' 불가</span>');
-		else $('#usrPwChk').html('<span class="text-success">' + msg + ' 가능</span>');
-	} else if(pw.length == 0) $('#usrPwChk').html('<span class="text-danger">필수 입력</span>');
-	else $('#usrPwChk').empty();
-}
-
-// 비번일치체크
-function pwAgainChk(job) {	
-	if($('#usrPw').val().length && $('#usrPwAgain').val().length) {
-		if($('#usrPwAgain').val() == $('#usrPw').val())
-			$('#usrPwAgainChk').html('<span class="text-success">일치</span>');
-		else
-			$('#usrPwAgainChk').html('<span class="text-danger">불일치</span>');
-	} else if($('#usrPwAgain').val().length) {
-		$('#usrPwAgainChk').html('<span class="text-danger">불일치</span>');
-		$('#usrPwChk').empty();
-	} else if($('#usrPw').val().length == 0) $('#usrPwAgainChk').html('<span class="text-danger">필수 입력</span>');
-	else $('#usrPwAgainChk').empty();
-}
-
 // 이름 중복체크 
 function nameChk(job) {
 	switch(job) {
@@ -155,49 +122,7 @@ function phoneChk(job) {
 	} else $('#usrPhoneChk').empty();
 }
 
-//대표 클래스 아이콘 변경
-function switchClsIcon() {
-	if($('#usrClsSetting #clsIcon').attr('name') == 'EXERCISE') {
-		$('#usrClsSetting #clsIcon').attr('name', 'STUDY');
-		$('#usrClsSetting #clsIcon').attr('src', '/godgamez/res/user/icon/STUDY.jpg');
-		$('#usrClsSetting #clsIcon').attr('alt', '공부 아이콘');
-	} else {
-		$('#usrClsSetting #clsIcon').attr('name', 'EXERCISE');
-		$('#usrClsSetting #clsIcon').attr('src', '/godgamez/res/user/icon/EXERCISE.jpg');
-		$('#usrClsSetting #clsIcon').attr('alt', '운동 아이콘');
-	}
-}
-
-//보유 클래스 수가 9개면 검색 버튼 비활성화, 0개라면 빼기 버튼 비활성화
-function clsLimit() {
-	$('#usrClsNameChk').html('&nbsp;');
-	$('#srchClsBtn').attr('disabled', true);
-	$('#clsRmvBtn').attr('disabled', true);
-	
-	if($('div[id^="usrClsList"] label').length == 9) {
-		$('#usrClsNameChk').append('<span class="text-success">등록 가능한 수의 클래스를 전부 등록했습니다.</span>');
-		$('#clsRmvBtn').removeAttr('disabled');
-	} else if($('div[id^="usrClsList"] label').length == 0) {
-		$('#usrClsNameChk').append('<span class="text-danger">클래스를 1개 이상 등록하세요.</span>');
-		$('#srchClsBtn').removeAttr('disabled');
-	} else {
-		$('#clsRmvBtn').removeAttr('disabled');
-		$('#srchClsBtn').removeAttr('disabled');
-	}
-}
-
-// 인풋값 이상있는 지 없는 지
-function chkInput(num) {
-	$('#nextStepBtn').attr('disabled', true); 
-	allInput = document.querySelectorAll('h6 span').length;
-	goodInput = document.querySelectorAll('h6 .text-success').length;
-	wrongInput = document.querySelectorAll('h6 .text-danger').length;
-	
-	if(allInput - goodInput == 0 && wrongInput < 1 && num <= allInput)
-		$('#nextStepBtn').removeAttr('disabled');
-}
-
-/* 클래스 선택 시 해당 클래스 추가
+/* 클래스 선택 시 해당 클래스 추가 */
 function addClsFor(userCode) {
 	let classes = document.querySelectorAll("label input[name='usrClsId']");
 	let addClsSucCnt = 0;
@@ -221,10 +146,9 @@ function addClsFor(userCode) {
 		})
 	})
 	
-	if(addClsFailCnt == 0) sendMails(userCode);
-	else reset(userCode);
+	//if(addClsFailCnt == 0) sendMails(userCode);
+	//else reset(userCode);
 }
-*/
 
 /* 회원 추가 이상할 때 리셋
 function reset(userCode) {
@@ -252,7 +176,7 @@ function addUser() {
   		usrLv : 0,
   		gold : 0,
   		regDate : new Date().toISOString().substring(0, 10),
-  		//usrIcon : $('#usrClsSetting #clsIcon').attr('name')
+  		usrIcon : $('#usrClsSetting #clsIcon').attr('name')
   	}
 	
 	console.log("addUser")
@@ -264,7 +188,7 @@ function addUser() {
 		data: JSON.stringify(userAddData),
 		success: function(result) {
 			console.log("addUser2")
-			/* 
+			
 			if(result) {
 	     		$.ajax({
 	     			url: "/godgamez/user/get",
@@ -275,15 +199,15 @@ function addUser() {
 	     	        	console.log("addUser3")
 	     	        	if(user != null) {
 		   	        		addClsFor(user.usrCode);
-		   	        	} else reset(user.usrCode);
-	     	        }, fail: function() {
-	     	        	reset(user.usrCode);
-		     		}
+		   	        		console.log("addUser4")
+		   	        	}// else reset(user.usrCode);
+	     	        }//, fail: function() {
+	     	        	//reset(user.usrCode);
+		     		//}
 		     	})
-		    } else reset(user.usrCode);
+		    }// else reset(user.usrCode);
 		}, fail: function() {
 			modal("회원", "가입", "실패");
-			*/
 		}
 	})
 }
@@ -391,8 +315,8 @@ function sendMails(userCode) {
 	} else reset(userCode);
 } */
 
-$(chkToday);
-$(clsLimit);
+chkToday();
+clsLimit();
 
 </script>
 
@@ -602,7 +526,8 @@ $(clsLimit);
 						<option value="subCtg">중분류</option>
 						<option value="clsName">이름</option>
 					</select>
-					<input type='text' class='form-control ml-3 w-50' id='srchClsIn' placeholder='2글자 이상 입력하세요'>
+					<input type='text' class='form-control ml-3 w-50'
+						id='srchClsIn' oninput='srchClsList()' placeholder='2글자 이상 입력하세요'>
 					<button type='button' id='srchClsForUsrBtn' class='btn btn-outline-secondary'>검색</button>
 				</div>
 				<div class='row justify-content-end'>
@@ -614,7 +539,7 @@ $(clsLimit);
 						<table class='table border text-center'>
 							<thead>
 								<tr>
-									<th id='checkCol'>
+									<th class='checkCol'>
 										<input type='checkbox' id='checkall10'>
 									</th>
 									<th>대분류</th>

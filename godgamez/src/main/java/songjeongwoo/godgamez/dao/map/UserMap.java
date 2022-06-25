@@ -10,6 +10,8 @@ public interface UserMap {
 	
 	User selectUserById(String usrId);
 	
+	int updateUser(User user);
+	
 	/* admin - 포지션 별 유저 리스트 소환  */
 	List<User> selectPlayers();
 	List<User> selectNoobs();

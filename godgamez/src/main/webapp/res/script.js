@@ -160,6 +160,225 @@ function modal(b, f, result, ...msg) {
 	$('#bFResultModal').modal('show');
 }
 
+/* 보유 클래스 수가 9개면 검색 버튼 비활성화, 0개라면 빼기 버튼 비활성화 - 회원가입 시, 회원정보 수정 시 */
+function clsLimit() {
+	$('#usrClsNameChk').html('&nbsp;');
+	$('#srchClsBtn').attr('disabled', true);
+	$('#clsRmvBtn').attr('disabled', true);
+	
+	if($('div[id^="usrClsList"] label').length == 9) {
+		$('#usrClsNameChk').append('<span class="text-success">등록 가능한 수의 클래스를 전부 등록했습니다.</span>');
+		$('#clsRmvBtn').removeAttr('disabled');
+	} else if($('div[id^="usrClsList"] label').length == 0) {
+		$('#usrClsNameChk').append('<span class="text-danger">클래스를 1개 이상 등록하세요.</span>');
+		$('#srchClsBtn').removeAttr('disabled');
+	} else {
+		$('#clsRmvBtn').removeAttr('disabled');
+		$('#srchClsBtn').removeAttr('disabled');
+	}
+}
+
+/* 인풋값 이상있는 지 없는 지 - 회원가입 시, 회원정보 수정 시 */
+function chkInput(num) {
+	$('#nextStepBtn').attr('disabled', true); 
+	allInput = document.querySelectorAll('h6 span').length;
+	goodInput = document.querySelectorAll('h6 .text-success').length;
+	wrongInput = document.querySelectorAll('h6 .text-danger').length;
+	
+	if(allInput - goodInput == 0 && wrongInput < 1 && num <= allInput)
+		$('#nextStepBtn').removeAttr('disabled');
+}
+
+/* 비번 체크 - 회원가입 시, 회원정보 수정 시 */
+function pwChk(job) {
+	pw = $('#usrPw').val();
+	
+	switch(job) {
+		case 1: msg = '사용'; break;
+		case 2: msg = '조회'; break;
+		case 3: msg = '변경';
+	}
+	
+	if(pw.length) {
+		if(pw.length < 6 || 10 < pw.length || pw.search(/\s/) != -1 || pw.search(/[ㄱ-ㅎㅏ-ㅣ가-힣]/) != -1 
+				|| pw.search(/[0-9]/) < 0 || pw.search(/[a-zA-Z]/) < 0 || pw.search(/[,./~!@#$%^&*()_+=<>?:;{}]/) < 0)
+			$('#usrPwChk').html('<span class="text-danger">' + msg + ' 불가</span>');
+		else $('#usrPwChk').html('<span class="text-success">' + msg + ' 가능</span>');
+	} else if(pw.length == 0) $('#usrPwChk').html('<span class="text-danger">필수 입력</span>');
+	else $('#usrPwChk').empty();
+}
+
+/* 비번일치체크 - 회원가입 시, 회원정보 수정 시 */
+function pwAgainChk(job) {	
+	if($('#usrPw').val().length && $('#usrPwAgain').val().length) {
+		if($('#usrPwAgain').val() == $('#usrPw').val())
+			$('#usrPwAgainChk').html('<span class="text-success">일치</span>');
+		else
+			$('#usrPwAgainChk').html('<span class="text-danger">불일치</span>');
+	} else if($('#usrPwAgain').val().length) {
+		$('#usrPwAgainChk').html('<span class="text-danger">불일치</span>');
+		$('#usrPwChk').empty();
+	} else if($('#usrPw').val().length == 0) $('#usrPwAgainChk').html('<span class="text-danger">필수 입력</span>');
+	else $('#usrPwAgainChk').empty();
+}
+
+/* 클래스 검색 - 회원가입 시, 회원정보 수정 시 */
+function srchClsList() {
+	let srchOpt = $('#srchClsOpt option:selected').val()
+	let keyword = $('#srchClsModal #srchClsIn').val()
+	searchData = {};
+	
+	if(srchOpt != 'srchCondition') {
+		switch(srchOpt) {
+		case "mainCtg" : searchData = {mainCtg: keyword}; break;
+		case "subCtg" : searchData = {subCtg: keyword}; break;
+		case "clsName" : searchData = {clsName: keyword}
+		}
+		
+		$.ajax({
+			url: '/godgamez/class/search',
+			method: 'post',
+			data: JSON.stringify(searchData),
+			contentType: 'application/json'
+		}).done(clss => {
+			if(clss.length) {
+				let clsList = []
+				$('#srchClsCnt').text("총 " + clss.length + "건 검색");
+				$('#srchClsTBody').empty()
+				
+				$.each(clss, (idx, cls) => {
+					clsList.push(
+						"<tr id='clsDetail'>"+
+							"<td class='checkCol'><input type='checkbox' id='choosenClsId' name='check10' value="+ cls.clsId +"></td>"+
+			  				"<td id='mainCtg'>"+ cls.mainCtg +"</td>"+
+			  				"<td id='subCtg'>"+ cls.subCtg +"</td>"+
+			  				"<td id='clsName'>"+ cls.clsName +"</td>"+
+			  			"</tr>");
+					});
+				$('#srchClsTBody').append(clsList.join(''))
+			} else {
+				$('#srchClsTBody').html(
+						'<tr><td colspan="4"><span class="text-danger font-weight-bold">' +
+							'「' + keyword + '」</span>에 대한 검색결과가 없습니다.' +
+						'</td></tr>')
+			}
+		}).fail( function() {
+			$('#srchClsTBody').html('')
+			$('#srchClsTBody').append('<tr><td colspan="5">클래스를 검색할 수 없습니다.</td></tr>')
+		})
+	} else if(srchOpt == 'srchCondition') {
+		$('#srchClsTBody').html('<tr><td colspan="5">검색 조건을 선택하세요.</td></tr>')
+	}
+}
+
+/* 클래스 추가 시 제약사항 - 회원가입 시, 회원정보 수정 시 */
+function checkCls(myCls) {
+	let choosenClss = [];
+	$('#choosenClsId:checked').each(function() {
+		selectClsId = $(this).val();
+		selectClsName = $(this).parents('tr').find('#clsName').text();
+		selectClass = $(this).val() + "|" + $(this).parents('tr').find('#clsName').text();
+		/* 중복 검사 */
+		if(myCls.search(selectClsName) == -1) choosenClss.push(selectClass);
+	})
+	let selectClsSize = choosenClss.length;
+	/* 갯수 검사 */
+	if(selectClsSize + document.querySelectorAll('#usrClsName').length > 9) {
+		modal("클래스", "등록", "실패10", "현재 등록 가능한 클래스 수보다<br>선택한 클래스 수가 더 많습니다.");
+		return [];
+	} else return choosenClss;
+}
+
+/* 클래스 선택 시 해당 클래스 추가 - 회원가입 시, 회원정보 수정 시 */
+function addClsPre() {
+	if(!$('#choosenClsId:checked').length) modal("회원 클래스", "추가", "실패3");
+	else {
+		let myCls = $('#usrClsSetting').text();
+		let choosenClss = checkCls(myCls);
+		
+		if(choosenClss.length) {
+			choosenClss.forEach(function(clsIdName) {
+				clsId = clsIdName.split("|")[0];
+				clsName = clsIdName.split("|")[1];
+				
+				appendContent =
+					"<label for=" + clsName + ">" +
+						"<input type='checkbox' name='usrClsName' value=" + clsName + ">" +
+						clsName +
+						"<input type='text' value=" + clsId + " name='usrClsId' hidden=true readonly>" +
+					"</label>";
+				
+				if(document.querySelectorAll('#usrClsList1 label').length < 3)
+					$('#usrClsList1').append(appendContent)
+				else if(document.querySelectorAll('#usrClsList2 label').length < 3)
+					$('#usrClsList2').append(appendContent)
+				else if(document.querySelectorAll('#usrClsList3 label').length < 3)
+					$('#usrClsList3').append(appendContent)
+				else modal("클래스", "등록", "실패");
+			})
+		} else modal("클래스", "등록", "실패10", "추가할 클래스가 없습니다.<br><span class='small'>클래스를 중복해서 선택했는 지 확인하세요.</small>");
+		$('#srchClsModal').modal('hide');
+	}
+}
+
+/* 클래스 리스트 - 회원가입 시, 회원정보 수정 시 */
+function listCls() {
+	$('#srchClsModal').modal("show");
+	$('#srchClsForUsrBtn').text("검색");
+	$('#srchClsForUsrBtn').attr("onclick", "srchClsList()");
+	
+	$('#choosenClsId:checked').prop('checked', false);
+	$('#srchClsTBody').empty();
+	
+	$.ajax({
+		url: '/godgamez/class/list',
+		method: 'get'
+	}).done(clss => {
+		if(clss.length) {
+			let clsList = [];
+			$('#srchClsCnt').text("총 " + clss.length + "건")
+			$('#srchClsTBody').empty();
+			
+			$.each(clss, (idx, cls) => {
+				clsList.push(
+					"<tr id='clsDetail'>"+
+						"<td class='checkCol'><input type='checkbox' id='choosenClsId' name='check10' value="+ cls.clsId +"></td>"+
+		  				"<td id='mainCtg'>"+ cls.mainCtg +"</td>"+
+		  				"<td id='subCtg'>"+ cls.subCtg +"</td>"+
+		  				"<td id='clsName'>"+ cls.clsName +"</td>"+
+		  			"</tr>");
+				});
+			$('#srchClsTBody').append(clsList.join(''))
+		} else
+			$('#srchClsTBody').html('<tr><td colspan="4" class="text-center">클래스가 존재하지 않습니다.</td></tr>')
+	}).fail(() => {
+		$('#srchClsTBody').html('<tr><td colspan="4" class="text-center">클래스를 조회하지 못했습니다.</td></tr>')
+	})
+}
+
+/* 클래스 선택 시 해당 클래스 삭제 - 회원가입 시, 회원정보 수정 시 */
+function rmvCls() {
+	$('#usrClsNameChk').html('&nbsp;');
+	$('#srchClsBtn').removeAttr('disabled');
+	
+	if($('input[name="usrClsName"]:checked').length)
+		$('input[name="usrClsName"]:checked').parent('label').remove();
+	else $('#usrClsNameChk').append('<span class="text-danger">클래스를 1개 이상 선택해주세요.</span>');
+}
+
+/* 대표 클래스 아이콘 변경 - 회원가입 시, 회원정보 수정 시 */
+function switchClsIcon() {
+	if($('#usrClsSetting #clsIcon').attr('name') == 'EXERCISE') {
+		$('#usrClsSetting #clsIcon').attr('name', 'STUDY');
+		$('#usrClsSetting #clsIcon').attr('src', '/godgamez/res/user/icon/STUDY.jpg');
+		$('#usrClsSetting #clsIcon').attr('alt', '공부 아이콘');
+	} else {
+		$('#usrClsSetting #clsIcon').attr('name', 'EXERCISE');
+		$('#usrClsSetting #clsIcon').attr('src', '/godgamez/res/user/icon/EXERCISE.jpg');
+		$('#usrClsSetting #clsIcon').attr('alt', '운동 아이콘');
+	}
+}
+
 /* 전체선택 알고리즘 */
 $(document).ready(function() {
 	$('.checkCol input[id^="checkall"]').click(function() {
