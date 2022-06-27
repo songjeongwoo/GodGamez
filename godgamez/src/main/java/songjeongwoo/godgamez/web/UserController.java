@@ -1,5 +1,6 @@
 package songjeongwoo.godgamez.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import songjeongwoo.godgamez.domain.User;
+import songjeongwoo.godgamez.domain.Class;
 import songjeongwoo.godgamez.domain.UserClass;
 import songjeongwoo.godgamez.service.UserService;
 
@@ -84,7 +86,13 @@ public class UserController {
 		} else return false;
 	}
 	
-	/* 회원 클래스 초기화 - 회원정보 변경 시 */
+	/* 유저에 따라 다르게 클래스 목록 조회 - 회원정보 변경 / 관리자페이지 회원정보 수정 */
+	@PostMapping("/user/class/list/{usrCode}")
+	public List<Class> getClassesForUser(@PathVariable String usrCode) {
+		return userService.getClassesForUser(Integer.parseInt(usrCode));
+	}
+	
+	/* 회원 클래스 초기화 - 회원정보 변경 */
 	@Transactional
 	@DeleteMapping("/userclass/reset/{usrCode}")
 	public int resetUserClasses(@PathVariable int usrCode) {
@@ -111,6 +119,20 @@ public class UserController {
 		return mv;
 	}
 	
+	/* 회원탈퇴 신청 */
+	@Transactional
+	@PatchMapping("/user/quitProc")
+	public boolean holdQuit(HttpSession session) {
+		User user = (User)(session.getAttribute("user"));
+		user.setPosition("OUT");
+		
+		if(userService.patchUser(user)) {
+			session.setAttribute("user", user);
+			session.invalidate();
+			return true;
+		} else return false;
+	}
+	
 	/* admin - 포지션별 회원 목록 조회 */
 	@PostMapping("/user/listUsers")
 	public List<User> getUsers(@RequestBody Map<String, String> positionMap) {
@@ -130,5 +152,35 @@ public class UserController {
 	public boolean usrPlayer(@RequestBody User user) {
 		user.setPosition("PLAYER");
 		return userService.patchUser(user);
+	}
+	
+	/* 이름, 별명, 아이디로 회원 목록 검색 */
+	@PostMapping("/user/findUsers")
+	public List<User> findUsers(@RequestBody Map<String, String> searchMap) {
+		return userService.findUsers(searchMap);
+	}
+	
+	/* 관리자 회원 삭제 */
+	@Transactional
+	@DeleteMapping("/user/del/{usrCode}")
+	public Map<String, String> delUser(@PathVariable String usrCode) {
+		int userCode = Integer.parseInt(usrCode);
+		boolean rst = false;
+		
+		if(userService.getClassesForUser(userCode) != null)// && userService.getUsrQstListOfUsr(userCode) != null)
+			rst = userService.delUserClassForUnreg(userCode) && userService.delUser(userCode);// && userService.delUserQuestForUnreg(userCode);
+		else if(userService.getClassesForUser(userCode) != null)
+			rst = userService.delUserClassForUnreg(userCode) && userService.delUser(userCode);
+		//else if(userService.getUsrQstListOfUsr(userCode) != null)
+			//rst = userService.delUserQuestForUnreg(userCode) && userService.delUser(userCode);
+		else rst = userService.delUser(userCode);
+		
+		Map<String, String> result = new HashMap<>();
+		
+		result.put("userCode", userCode + "");
+		if(rst) result.put("isDone", "성공");
+		else result.put("isDone", "실패");
+		
+		return result;
 	}
 }

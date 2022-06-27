@@ -16,4 +16,8 @@ public interface UserDao {
 	List<User> selectUsers(Map<String, String> positionMap);
 	User selectUser(Map<String, String> getMap);
 	int patchUser(User user);
+	
+	List<User> searchUsers(Map<String, String> searchMap);
+	
+	int deleteUser(int usrCode);
 }

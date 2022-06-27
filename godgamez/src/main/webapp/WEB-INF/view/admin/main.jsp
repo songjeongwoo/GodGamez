@@ -179,10 +179,9 @@ $(document).ready(function() {
 				bePlayer(outCode);
 			})
 		}
-		$(getOuts);
+		getOuts();
 	})
 	
-	/*
 	$('#usrUnregBtn').click(function() {
 		outsCode = $('#outDetail .usrCode:checked').val();
 		if(outsCode == null) modal("탈퇴 신청 회원", "삭제", '실패3');
@@ -198,7 +197,7 @@ $(document).ready(function() {
 						url: "/godgamez/user/del/" + outCode,
 						type: "DELETE",
 						complete: function(result) {
-		    			   $('#delRst').append(`<tr><td>\${result.userCode}</td><td class='text-success'>\${result.isDone}</td></tr>`);
+		    			   $('#delRst').append(`<tr><td>\${result.responseJSON.userCode}</td><td class='text-success'>\${result.responseJSON.isDone}</td></tr>`);
 						}
 			    	})
 			    })
@@ -206,12 +205,11 @@ $(document).ready(function() {
 				$('#bFResultModal').modal('hide');
 				$('#delRstModal').modal('show');
 				$('#delRstModal button').click(function() {
-					$(getOuts);
+					getOuts();
 				})
 			})
 		}
 	})
-	*/
 })
 </script>
 

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import songjeongwoo.godgamez.dao.UserDao;
 import songjeongwoo.godgamez.dao.UserClassDao;
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
 		return userDao.updateUser(user) > 0;
 	}
 	
-	/* 회원 클래스 초기화 - 회원정보 변경 시 */
+	/* 회원 클래스 초기화 - 회원정보 변경 시 유저에 따라 다르게 클래스 목록 조회  */
 	@Override
 	public List<Class> getClassesForUser(int usrCode) {
 		return userClassDao.selectClassesForUser(usrCode);
@@ -73,8 +75,31 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectUser(getMap);
 	}
 	
+	/* 신규 회원 인증 처리 및 탈퇴 신청 회원 복구 처리 - admin 또는 회원탈퇴 신청 */
 	@Override
 	public boolean patchUser(User user) {
 		return userDao.patchUser(user) > 0;
+	}
+	
+	/* 이름, 별명, 아이디로 회원 목록 검색 */
+	@Override
+	public List<User> findUsers(Map<String, String> searchMap) {
+		return userDao.searchUsers(searchMap);
+	}
+	
+	/* 관리자 회원 삭제
+	@Override
+	public List<UserQuest> getUsrQstListOfUsr(int usrCode) {
+		return userQuestDao.selectUsrQstListOfUsr(usrCode);
+	}
+	
+	@Override
+	public boolean delUserQuestForUnreg(int usrCode) {
+		return userQuestDao.deleteUserQuestForUnreg(usrCode) > 0;
+	} */
+	
+	@Override
+	public boolean delUser(int usrCode) {
+		return userDao.deleteUser(usrCode) > 0;
 	}
 }

@@ -32,6 +32,9 @@ public class AppConfig implements WebMvcConfigurer {
 		registry.addViewController("/user/modify/step1").setViewName("user/fixUserChk");
 		registry.addViewController("/user/modify/step2").setViewName("user/fixUserIn");
 		
+		registry.addViewController("/user/quit/step1").setViewName("user/delUserChk");
+		registry.addViewController("/user/quit/step2").setViewName("user/delUserOut");
+		
 		/* 소개 & 약관 */
 		registry.addViewController("/guide/aboutUs").setViewName("guide/aboutUs");
 		registry.addViewController("/guide/tos").setViewName("guide/tos");
@@ -45,7 +48,8 @@ public class AppConfig implements WebMvcConfigurer {
 		registry.addViewController("/user/login").setViewName("user/login");
 		
 		registry.addViewController("/admin").setViewName("admin/main");
-		
+
+		registry.addViewController("/admin/users").setViewName("admin/user/crudUser");
 		registry.addViewController("/admin/classes").setViewName("admin/class/crudClass");
 		registry.addViewController("/admin/quests").setViewName("admin/quest/crudQuest");
 	}

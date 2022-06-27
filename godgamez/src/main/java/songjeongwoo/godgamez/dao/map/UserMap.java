@@ -24,4 +24,10 @@ public interface UserMap {
 	
 	int patchUser(User user);
 	
+	List<User> searchUsersById(String usrId);
+	List<User> searchUsersByCode(int usrCode);
+	List<User> searchUsersByName(String usrName);
+	List<User> searchUsersByNick(String nickname);
+	
+	int deleteUser(int usrCode);
 }

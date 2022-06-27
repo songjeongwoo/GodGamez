@@ -61,11 +61,37 @@
 		where nickname = #{nickname}
 	</select>
 	
+	<!-- 신규 회원 인증 처리 및 탈퇴 신청 회원 복구 처리 - admin 또는 회원탈퇴 신청 -->
 	<update id='patchUser'>
 		update users
 		set position = #{position}, user_level = #{usrLv}, gold = #{gold}
 		where user_code = #{usrCode}
 	</update>
+	
+	<select id='searchUsersById' resultMap='userMap'>
+		select * from users
+		where user_id like '%' || #{usrId} || '%'
+	</select>
+	
+	<select id='searchUsersByCode' resultMap='userMap'>
+		select * from users
+		where user_code like '%' || #{usrCode} || '%'
+	</select>
+	
+	<select id='searchUsersByName' resultMap='userMap'>
+		select * from users
+		where user_name like '%' || #{usrName} || '%'
+	</select>
+	
+	<select id='searchUsersByNick' resultMap='userMap'>
+		select * from users
+		where nickname like '%' || #{nickname} || '%'
+	</select>
+	
+	<delete id='deleteUser'>
+		delete users cascade
+		where user_code = #{usrCode}
+	</delete>
 	
 	<resultMap id="userMap" type="user">
       <id     property="usrCode" 		column="user_code"/>

@@ -70,4 +70,23 @@ public class UserDaoImpl implements UserDao {
 	public int patchUser(User user) {
 		return userMap.patchUser(user);
 	}
+	
+	/* 유저 검색해서 리스트 추출 */
+	@Override
+	public List<User> searchUsers(Map<String, String> searchMap) {
+		if(searchMap.get("usrId") != null)
+			return userMap.searchUsersById(searchMap.get("usrId"));
+		else if(searchMap.get("usrCode") != null)
+			return userMap.searchUsersByCode(Integer.parseInt(searchMap.get("usrCode")));
+		else if(searchMap.get("usrName") != null)
+			return userMap.searchUsersByName(searchMap.get("usrName"));
+		else if(searchMap.get("nickname") != null)
+			return userMap.searchUsersByNick(searchMap.get("nickname"));
+		else return null;
+	}
+	
+	@Override
+	public int deleteUser(int usrCode) {
+		return userMap.deleteUser(usrCode);
+	}
 }

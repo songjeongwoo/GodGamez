@@ -180,7 +180,7 @@ function clsLimit() {
 
 /* 인풋값 이상있는 지 없는 지 - 회원가입 시, 회원정보 수정 시 */
 function chkInput(num) {
-	$('#nextStepBtn').attr('disabled', true); 
+	$('#nextStepBtn').attr('disabled', true);
 	allInput = document.querySelectorAll('h6 span').length;
 	goodInput = document.querySelectorAll('h6 .text-success').length;
 	wrongInput = document.querySelectorAll('h6 .text-danger').length;

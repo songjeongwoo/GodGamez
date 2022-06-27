@@ -15,8 +15,5 @@ public interface UserClassDao {
 	int deleteUserClassForUnreg(@Param("usrCode")int userCode);
 	int deleteUserClass(int usrCode, int clsId);
 	
-	/*
-		
-	List<Class> searchClassesForUser(Map<String, String> searchMap);
-	*/
+	//List<Class> searchClassesForUser(Map<String, String> searchMap);
 }

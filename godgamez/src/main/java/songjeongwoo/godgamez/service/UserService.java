@@ -24,4 +24,10 @@ public interface UserService {
 	List<User> getUsers(Map<String, String> positionMap);
 	User getUser(Map<String, String> getMap);
 	boolean patchUser(User user);
+	
+	List<User> findUsers(Map<String, String> searchMap);
+	
+	//List<UserQuest> getUsrQstListOfUsr(int usrCode);
+	//boolean delUserQuestForUnreg(int usrCode);
+	boolean delUser(int usrCode);
 }
