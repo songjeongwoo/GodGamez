@@ -5,12 +5,10 @@ import java.util.Map;
 
 import songjeongwoo.godgamez.domain.Quest;
 //import songjeongwoo.godgamez.domain.UserQuest;
+import songjeongwoo.godgamez.domain.UserQuest;
 
 public interface QuestService {
 	/*
-	List<UserQuest> getQstsForUsr(int usrCode);
-	List<UserQuest> getExcQstsForUsr(int usrCode);
-	List<UserQuest> getStdQstsForUsr(int usrCode);
 	List<UserQuest> srchQstDifficulty(UserQuest userQuest);
 	List<UserQuest> srchQstClsName(UserQuest userQuest);
 	boolean acptQst(UserQuest userQuest);
@@ -28,6 +26,8 @@ public interface QuestService {
 	boolean fixQuest(Quest quest);
 	boolean delQuest(int qstId);
 	
+	/* 유저별 전체/운동/공부탭 별 퀘스트 목록 조회 */
+	List<UserQuest> getQstsForUsr(String qstCtg, int usrCode);
 	/*
 	List<UserQuest> getAcptdQstCnt(int qstId);
 	boolean finishUserQuest(UserQuest userQuest);

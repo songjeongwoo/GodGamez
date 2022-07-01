@@ -7,27 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import songjeongwoo.godgamez.dao.QuestDao;
+import songjeongwoo.godgamez.dao.UserQuestDao;
 //import songjeongwoo.godgamez.dao.UserQuestDao;
 import songjeongwoo.godgamez.domain.Quest;
-//import songjeongwoo.godgamez.domain.UserQuest;
+import songjeongwoo.godgamez.domain.UserQuest;
 
 @Service
 public class QuestServiceImpl implements QuestService{
 	@Autowired private QuestDao questDao;
-//	@Autowired private UserQuestDao userQuestDao;
+	@Autowired private UserQuestDao userQuestDao;
+	
+	/* 유저별 전체/운동/공부탭 별 퀘스트 목록 조회 */
+	@Override
+	public List<UserQuest> getQstsForUsr(String qstCtg, int usrCode) {
+		return userQuestDao.selectQstsForUsr(qstCtg, usrCode);
+	}
+	
 	/*
-	@Override
-	public List<UserQuest> getQstsForUsr(int usrCode) {
-		return userQuestDao.selectQstsForUsr(usrCode);
-	}
-	@Override
-	public List<UserQuest> getExcQstsForUsr(int usrCode) {
-		return userQuestDao.selectExcQstsForUsr(usrCode);
-	}
-	@Override
-	public List<UserQuest> getStdQstsForUsr(int usrCode) {
-		return userQuestDao.selectStdQstsForUsr(usrCode);
-	}
 	@Override
 	public List<UserQuest> srchQstDifficulty(UserQuest userQuest) {
 		return userQuestDao.selectQstDifficulty(userQuest);

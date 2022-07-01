@@ -14,33 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import songjeongwoo.godgamez.domain.Quest;
+import songjeongwoo.godgamez.domain.UserQuest;
 //import songjeongwoo.godgamez.domain.UserQuest;
 import songjeongwoo.godgamez.service.QuestService;
 
 @RestController
 @RequestMapping
 public class QuestController {
-	@Autowired private QuestService questService;	
+	@Autowired private QuestService questService;
+	
+	/* 유저별 전체/운동/공부탭 별 퀘스트 목록 조회 */
+	@PostMapping("/quest/qstsForUsr")
+	public List<UserQuest> getQstsForUsr(String qstCtg, int usrCode) {
+		return questService.getQstsForUsr(qstCtg, usrCode);
+	}
+	
 	/*
-	//user 퀘스트 리스트
-	@GetMapping("/quest/qstsForUsr")
-	public List<UserQuest> getQstsForUsr(int usrCode) {
-		return questService.getQstsForUsr(usrCode);
-	}
-	
-	//user quest 운동탭
-	@GetMapping("/quest/usrExcQstList")
-	public List<UserQuest> getExcQstsForUsr(int usrCode) {
-		return questService.getExcQstsForUsr(usrCode);
-	}
-	
-	//user quest 공부탭
-	@GetMapping("/quest/usrStdQstList")
-	public List<UserQuest> getStdQstsForUsr(int usrCode) {
-		return questService.getStdQstsForUsr(usrCode);
-	}
-	
-	
 	//난이도별 퀘스트 조회
 	@PostMapping("/quest/difficulty")
 	public List<UserQuest> srchQstDifficulty(@RequestBody UserQuest userQuest) {

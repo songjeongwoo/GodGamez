@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='songjeongwoo.godgamez.dao.map.UserQuestMap'>
+	<!-- 유저별 전체/운동/공부탭 별 퀘스트 목록 조회 -->
+	<!-- user 퀘스트 리스트 -->
+	<select id="selectQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		order by q.quest_id
+	</select>
+	
+	<!-- user 운동 퀘스트 리스트 -->
+	<select id="selectExcQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		and c.main_category = '운동'
+		order by q.quest_id
+	</select>
+	
+	<!-- user 공부 퀘스트 리스트 -->
+	<select id="selectStdQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		and c.main_category = '공부'
+		order by q.quest_id
+	</select>
+	
+	<resultMap id ="userQuestMap" type="userQuest">
+		<result property="procStep"		column="proc_step"/>
+		<result property="modDate"		column="mod_date"/>
+		<result property="handInImg" 	column="handin_image"/>
+		<association property="usr" column="user_code" select="selectUserQuestsUsr"/>
+		<association property="qst" column="quest_id" select="selectUserQuestsQst"/>
+   </resultMap>
+   
+   <resultMap id="userMap" type="user">
+		<id     property="usrCode" 		column="user_code"/>
+		<result property="position" 	column="position"/>
+		<result property="usrId" 		column="user_id"/>
+		<result property="usrPw" 		column="password"/>
+		<result property="usrName" 		column="user_name"/>
+		<result property="nickname" 	column="nickname"/>
+		<result property="birthday" 	column="birthday"/>
+		<result property="phoneNum" 	column="phone_num"/>
+		<result property="usrLv" 		column="user_level"/>
+		<result property="gold" 		column="gold"/>
+		<result property="regDate" 		column="reg_date"/>
+		<result property="usrIcon"		column="user_icon"/>
+   </resultMap>
+   
+   <resultMap id="questMap" type="quest">
+		<id     property="qstId" 		column="quest_id"/>
+		<result property="qstName" 		column="quest_name"/>
+		<result property="difficulty" 	column="difficulty"/>
+		<result property="qstContent" 	column="quest_content"/>
+		<result property="qstImg"		column="quest_image"/>
+		<association property="cls" column="class_id" select="selectUserQuestCls"/>
+   </resultMap>
+   
+   <resultMap id="classMap" type="class">
+   		<id     property="clsId"	column="class_id"/>
+		<result property="mainCtg"	column="main_category"/>
+		<result property="subCtg"	column="sub_category"/>
+		<result property="clsName"	column="class_name"/>
+   </resultMap>
+</mapper>
