@@ -23,11 +23,13 @@ public class QuestServiceImpl implements QuestService{
 		return userQuestDao.selectQstsForUsr(qstCtg, usrCode);
 	}
 	
-	/*
+	/* 난이도별 퀘스트 조회 */
 	@Override
-	public List<UserQuest> srchQstDifficulty(UserQuest userQuest) {
-		return userQuestDao.selectQstDifficulty(userQuest);
+	public List<UserQuest> srchQstDifficulty(int usrCode, int difficulty) {
+		return userQuestDao.selectQstDifficulty(usrCode, difficulty);
 	}
+	
+	/*
 	@Override
 	public List<UserQuest> srchQstClsName(UserQuest userQuest) {
 		return userQuestDao.selectQstClsName(userQuest);

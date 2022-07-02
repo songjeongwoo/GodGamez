@@ -29,7 +29,7 @@ function loginCheck(){
         	} else if(result == 2) {
         		location.href = "/godgamez/admin";
         	} else {
-        		//modal("", "로그인", "실패10", "로그인에 실패하였습니다. ID와 PW를 확인하세요!");
+        		modal("", "로그인", "실패10", "로그인에 실패하였습니다. ID와 PW를 확인하세요!");
         	}
         }, fail: function() {
         	//예외처리 필요

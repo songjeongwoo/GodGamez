@@ -25,4 +25,9 @@ public class UserQuestDaoImpl implements UserQuestDao {
 		} return null;
 	}
 	
+	/* 난이도별 퀘스트 조회 */
+	@Override
+	public List<UserQuest> selectQstDifficulty(int usrCode, int difficulty) {
+		return userQuestMap.selectQstDifficulty(usrCode, difficulty);
+	}
 }

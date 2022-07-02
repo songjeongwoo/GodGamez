@@ -9,7 +9,6 @@ import songjeongwoo.godgamez.domain.UserQuest;
 
 public interface QuestService {
 	/*
-	List<UserQuest> srchQstDifficulty(UserQuest userQuest);
 	List<UserQuest> srchQstClsName(UserQuest userQuest);
 	boolean acptQst(UserQuest userQuest);
 	UserQuest chckAcptdQst(UserQuest userQuest);
@@ -28,6 +27,8 @@ public interface QuestService {
 	
 	/* 유저별 전체/운동/공부탭 별 퀘스트 목록 조회 */
 	List<UserQuest> getQstsForUsr(String qstCtg, int usrCode);
+	/* 난이도별 퀘스트 조회 */
+	List<UserQuest> srchQstDifficulty(int usrCode, int difficulty);
 	/*
 	List<UserQuest> getAcptdQstCnt(int qstId);
 	boolean finishUserQuest(UserQuest userQuest);

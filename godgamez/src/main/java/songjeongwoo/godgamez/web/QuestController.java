@@ -29,13 +29,13 @@ public class QuestController {
 		return questService.getQstsForUsr(qstCtg, usrCode);
 	}
 	
-	/*
-	//난이도별 퀘스트 조회
+	/* 난이도별 퀘스트 조회 */
 	@PostMapping("/quest/difficulty")
-	public List<UserQuest> srchQstDifficulty(@RequestBody UserQuest userQuest) {
-		return questService.srchQstDifficulty(userQuest);
+	public List<UserQuest> srchQstDifficulty(int usrCode, int difficulty) {
+		return questService.srchQstDifficulty(usrCode, difficulty);
 	}
 	
+	/*	
 	//user 클래스명 검색
 	@PostMapping("/quest/clsName")
 	public List<UserQuest> srchQstClsName(@RequestBody UserQuest userQuest) {

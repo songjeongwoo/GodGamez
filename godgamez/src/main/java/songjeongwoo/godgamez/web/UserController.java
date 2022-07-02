@@ -48,18 +48,16 @@ public class UserController {
 	/* 로그인 */
 	@PostMapping("/user/loginProc")
 	public int login(@RequestBody Map<String, String> loginMap, HttpSession session) throws Exception {
+		System.out.println("login");
 		int result = 0;
 		
-		try {
-			User user = userService.loginCheck(loginMap);
-			if(user != null) {
-				session.setAttribute("user", user);
-				if(user.getPosition().equals("NOOB") || user.getPosition().equals("PLAYER")) return 1;
-				else if(user.getPosition().equals("GM")) return 2;
-			} else return 0;
-		} catch(Exception e) {
-			return 0;
-		}
+		User user = userService.loginCheck(loginMap);
+		if(user != null) {
+			session.setAttribute("user", user);
+			if(user.getPosition().equals("NOOB") || user.getPosition().equals("PLAYER")) return 1;
+			else if(user.getPosition().equals("GM")) return 2;
+		} else return 0;
+		
 		return result;
 	}
 	
