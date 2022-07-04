@@ -67,6 +67,14 @@
 		on q.quest_id = uq.quest_id
 	</sql>
 	
+	<!-- user 클래스명 검색 -->
+	<select id='selectQstClsName' resultMap='userQuestMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usr.usrCode}
+		where uq.proc_step is null
+		and c.class_name like '%' || #{qst.cls.clsName} || '%'
+	</select>
+	
 	<resultMap id ="userQuestMap" type="userQuest">
 		<result property="procStep"		column="proc_step"/>
 		<result property="modDate"		column="mod_date"/>

@@ -13,5 +13,7 @@ public interface UserQuestMap {
 	List<UserQuest> selectStdQstsForUsr(int usrCode);
 	/* 난이도별 퀘스트 조회 */ //파라미터가 2개 이상일 경우 @Param을 통해 어떤 파라미터가 어떤 변수인지 알려준다.
 	List<UserQuest> selectQstDifficulty(@Param("usrCode")int usrCode, @Param("difficulty")int difficulty);
+	/* user 클래스명 검색   */
+	List<UserQuest> selectQstClsName(UserQuest userQuest);
 	
 }

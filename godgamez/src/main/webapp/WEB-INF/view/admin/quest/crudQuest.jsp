@@ -241,7 +241,7 @@ function addCls(clsId, clsFullName) {
 	$('#srchClsModal').modal('hide')
 }
 
-//클래스 리스트
+//클래스 리스트 - script.js와 다름, 백틱때문에 .js에 못 넣음
 function listCls() {
 	$('#srchClsTBody').empty();
 	$.ajax({
@@ -267,7 +267,7 @@ function listCls() {
 	})
 }
 
-//클래스 검색 
+/* 모달 내 클래스 검색 */ 
 function srchClsList() {
 	let srchOpt = $('#clsSrchOpt option:selected').val()
 	let keyword = $('#srchClsModal #srchClsIn').val()

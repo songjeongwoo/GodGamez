@@ -29,11 +29,12 @@ public class QuestServiceImpl implements QuestService{
 		return userQuestDao.selectQstDifficulty(usrCode, difficulty);
 	}
 	
-	/*
+	/* user 클래스명 검색 */
 	@Override
 	public List<UserQuest> srchQstClsName(UserQuest userQuest) {
 		return userQuestDao.selectQstClsName(userQuest);
 	}
+	/*
 	@Override
 	public boolean acptQst(UserQuest userQuest) {
 		return userQuestDao.addUsrQst(userQuest) > 0;

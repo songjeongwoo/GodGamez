@@ -30,4 +30,11 @@ public class UserQuestDaoImpl implements UserQuestDao {
 	public List<UserQuest> selectQstDifficulty(int usrCode, int difficulty) {
 		return userQuestMap.selectQstDifficulty(usrCode, difficulty);
 	}
+	
+	/* user 클래스명 검색   */
+	@Override
+	public List<UserQuest> selectQstClsName(UserQuest userQuest) {
+	return userQuestMap.selectQstClsName(userQuest);
+	}
+	
 }

@@ -35,13 +35,13 @@ public class QuestController {
 		return questService.srchQstDifficulty(usrCode, difficulty);
 	}
 	
-	/*	
-	//user 클래스명 검색
+	/* user 클래스명 검색 */
 	@PostMapping("/quest/clsName")
 	public List<UserQuest> srchQstClsName(@RequestBody UserQuest userQuest) {
 		return questService.srchQstClsName(userQuest);
 	}
 		
+	/*	
 	//user 퀘스트 수락
 	@PostMapping("/quest/addUsrQst")
 	public boolean acptQst(@RequestBody UserQuest userQuest) {
