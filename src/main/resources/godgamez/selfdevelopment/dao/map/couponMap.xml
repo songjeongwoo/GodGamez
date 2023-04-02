@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.CouponMap'>
+	<select id='selectCoupons' resultMap='couponMap'>
+		select * from coupons
+		order by coupon_code desc
+	</select>
+	
+	<select id='selectCouponsForUser' resultMap='couponMap'>
+		select * from coupons
+		where user_code = #{usrCode}
+		order by availability desc, coupon_code desc
+	</select>
+	
+	<select id='selectUsedCoupons' resultMap='couponMap'>
+		select * from coupons
+		where availability = 1
+		order by coupon_code desc
+	</select>
+	
+	<select id='selectNUsedCoupons' resultMap='couponMap'>
+		select * from coupons
+		where availability = 0
+		order by coupon_code desc
+	</select>
+	
+	<select id='selectCoupon' resultMap='couponMap'>
+		select * from coupons
+		where coupon_code = #{cpnCode}
+	</select>
+	
+	<resultMap id ="couponMap" type="coupon">
+      <id     property="cpnCode" 		column="coupon_code"/>
+      <result property="usrCode" 		column="user_code"/>
+      <result property="availability" 	column="availability"/>
+      <result property="store" 			column="store"/>
+      <result property="dcPer" 			column="dc_percent"/>
+   	</resultMap>
+   
+   	<insert id='insertCoupon'>
+   		insert into coupons(coupon_code, user_code, availability, store, dc_percent)
+        values(cpns_cpncode_seq.nextval, #{usrCode}, #{availability}, #{store}, #{dcPer})
+   	</insert>
+	
+	<update id='useCoupon'>
+		update coupons
+		set availability = 0
+		where coupon_code = #{cpnCode}
+	</update>
+</mapper>

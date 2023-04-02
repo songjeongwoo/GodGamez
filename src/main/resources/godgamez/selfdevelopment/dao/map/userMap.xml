@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.UserMap'>
+	<!-- 아이디 찾기
+	<select id='selectUsrId' resultMap='userMap'>
+		select * from users
+		where user_name = #{usrName}
+		and phone_num = #{phoneNum}
+		and birthday = #{birthday}
+	</select>
+	
+	 비번 찾기 
+	<select id='selectUsrPw' resultMap='userMap'>
+		select * from users
+		where user_id = #{usrId}
+		and user_name = #{usrName}
+		and phone_num = #{phoneNum}
+	</select> -->
+	
+	<!-- 랭킹보드 -->
+	<select id='selectRankers' resultMap='userMap'>
+		select * from users
+		where position = 'PLAYER'
+		order by user_level desc
+	</select>
+	
+	<!-- 포지션 별 유저 리스트 소환 -->
+	<!-- 신규가입회원들 (메일인증 안받은) -->
+	<select id='selectNoobs' resultMap='userMap'>
+		select * from users
+		where position = 'NOOB'
+		order by reg_date desc
+	</select>
+	
+	<!-- 모든 회원들 -->
+	<select id='selectPlayers' resultMap='userMap'>
+		select * from users
+		where position in('NOOB', 'PLAYER', 'OUT')
+		order by user_code desc
+	</select>
+	
+	<!-- 탈퇴 신청 회원들 -->
+	<select id='selectOutPlayers' resultMap='userMap'>
+		select * from users
+		where position = 'OUT'
+		order by user_code desc
+	</select>
+	
+	<select id='selectGms' resultMap='userMap'>
+		select * from users
+		where position = 'GM'
+		order by user_code desc
+	</select>
+	
+	<select id='selectUserById' resultMap='userMap'>
+		select * from users
+		where user_id = #{usrId}
+	</select>
+	
+	<select id='selectUserByCode' resultMap='userMap'>
+		select * from users
+		where user_code = #{usrCode}
+	</select>
+	
+	<select id='selectUserByPhonenum' resultMap='userMap'>
+		select * from users
+		where phone_num = #{phoneNum}
+	</select>
+	
+	<select id='selectUserByNick' resultMap='userMap'>
+		select * from users
+		where nickname = #{nickname}
+	</select>
+	
+	<select id='searchUsersById' resultMap='userMap'>
+		select * from users
+		where user_id like '%' || #{usrId} || '%'
+	</select>
+	
+	<select id='searchUsersByCode' resultMap='userMap'>
+		select * from users
+		where user_code like '%' || #{usrCode} || '%'
+	</select>
+	
+	<select id='searchUsersByName' resultMap='userMap'>
+		select * from users
+		where user_name like '%' || #{usrName} || '%'
+	</select>
+	
+	<select id='searchUsersByNick' resultMap='userMap'>
+		select * from users
+		where nickname like '%' || #{nickname} || '%'
+	</select>
+	
+	<select id='selectUserCodeSeqNextVal' resultType='int'>
+		select usrs_usrcode_seq.nextval from dual
+	</select>
+	
+	<select id='selectUserCodeSeqCurrVal' resultType='int'>
+		select usrs_usrcode_seq.currval from dual
+	</select>
+	
+	<resultMap id="userMap" type="user">
+      <id     property="usrCode" 		column="user_code"/>
+      <result property="position" 		column="position"/>
+      <result property="usrId" 			column="user_id"/>
+      <result property="usrPw" 			column="password"/>
+      <result property="usrName" 		column="user_name"/>
+      <result property="nickname" 		column="nickname"/>
+      <result property="birthday" 		column="birthday"/>
+      <result property="phoneNum" 		column="phone_num"/>
+      <result property="usrLv" 			column="user_level"/>
+      <result property="gold" 			column="gold"/>
+      <result property="regDate" 		column="reg_date"/>
+      <result property="usrIcon"		column="user_icon"/>
+   </resultMap>
+   
+	<insert id='insertUser'>
+		insert into users(user_code, position, user_id, password, user_name, nickname, birthday, phone_num, user_level, gold, reg_date, user_icon)
+        values(usrs_usrcode_seq.nextval, #{position}, #{usrId}, #{usrPw}, #{usrName}, #{nickname}, #{birthday}, #{phoneNum}, 0, 0, sysdate, #{usrIcon})
+	</insert>
+	
+	<update id='updateUser'>
+		update users
+		set position = #{position}, user_id = #{usrId}, password = #{usrPw}, user_name = #{usrName}, nickname = #{nickname}, birthday = #{birthday}, phone_num = #{phoneNum}, user_icon = #{usrIcon}
+		where user_code = #{usrCode}
+	</update>
+	
+	<update id='patchUser'>
+		update users
+		set position = #{position}, user_level = #{usrLv}, gold = #{gold}
+		where user_code = #{usrCode}
+	</update>
+	
+	<delete id='deleteUser'>
+		delete users cascade
+		where user_code = #{usrCode}
+	</delete>
+</mapper>

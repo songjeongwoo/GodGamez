@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<beans xmlns='http://www.springframework.org/schema/beans'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns:mvc='http://www.springframework.org/schema/mvc' 
+    xmlns:mybatis='http://mybatis.org/schema/mybatis-spring'   
+    xmlns:context='http://www.springframework.org/schema/context'
+    xmlns:tx='http://www.springframework.org/schema/tx'
+    xsi:schemaLocation='http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://mybatis.org/schema/mybatis-spring
+	http://mybatis.org/schema/mybatis-spring.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd'>
+    
+    <mvc:resources mapping='/res/**' location='/res/'/>
+   
+	<bean id='dataSource' class='org.springframework.jndi.JndiObjectFactoryBean'>
+		<property name='jndiName' value='java:comp/env/jdbc/hr'/>
+		<property name='resourceRef' value='true'/>
+	</bean>
+	
+	<bean id='sqlSessionFactory' class='org.mybatis.spring.SqlSessionFactoryBean'>
+		<property name='dataSource' ref='dataSource'/>
+		<property name='configLocation' value='classpath:godgamez/selfdevelopment/config/sqlMapConfig.xml'/>
+		<property name='mapperLocations'>
+			<array>
+				<value>classpath:godgamez/selfdevelopment/dao/map/**/*Map.xml</value>
+			</array>
+		</property>
+	</bean>
+	
+	<mybatis:scan base-package='godgamez.selfdevelopment.dao.map.**'/>
+	
+	<bean id='multipartResolver' class='org.springframework.web.multipart.commons.CommonsMultipartResolver'>
+		<property name='maxUploadSize' value='5242880'/><!-- 단위: 바이트, 5MB -->
+		<property name='maxInMemorySize' value='5242880'/>
+		<property name='defaultEncoding' value='utf-8'/>
+	</bean>
+	<context:property-placeholder location='classpath:godgamez/selfdevelopment/config/app.properties'/>
+	
+    <bean id='mailSender' class='org.springframework.mail.javamail.JavaMailSenderImpl'>
+    	<property name='username' value='godlife.gamez'/>
+    	<property name='password' value='gqvnilxlmxkfolxh'/>
+    	<property name='javaMailProperties'>
+    		<props>
+    			<prop key='mail.smtp.starttls.enable'>true</prop>
+    			<prop key='mail.smtp.host'>smtp.gmail.com</prop>
+    			<prop key='mail.smtp.port'>465</prop>
+    			<prop key='mail.smtp.socketFactory.class'>javax.net.ssl.SSLSocketFactory</prop>
+    			<prop key='mail.smtp.socketFactory.port'>465</prop>
+    			<prop key='mail.smtp.socketFactory.fallback'>false</prop>
+    			<prop key='mail.smtp.auth'>true</prop>
+    		</props>
+    	</property>
+    </bean>
+	
+	<!-- service단에서도 transaction을 관리-->
+	<bean id='transactionManager' class='org.springframework.jdbc.datasource.DataSourceTransactionManager'>
+		<property name='dataSource' ref='dataSource'/>
+	</bean>
+	<tx:annotation-driven/> <!-- @Transactional을 사용가능 -->
+</beans>

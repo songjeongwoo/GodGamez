@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.LogMap'>
+	<select id='selectLogs' resultMap='logMap'>
+		select * from logs
+		order by log_id
+	</select>
+
+	<resultMap id ="logMap" type="log">
+		<id 	property="logId"		column="log_id"/>
+		<result property="userType" 	column="user_type"/>
+		<result property="logEvent" 	column="log_event"/>
+		<result property="logTask" 		column="log_task"/>
+		<result property="logDate" 		column="log_date"/>
+		<result property="dbId" 		column="db_id"/>
+	</resultMap>
+
+</mapper>

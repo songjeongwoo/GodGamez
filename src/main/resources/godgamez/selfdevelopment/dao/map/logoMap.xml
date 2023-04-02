@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.LogoMap'>
+	<select id='selectLogos' resultMap='logoMap'>
+		select * from logos
+		order by logo_id
+	</select>
+	
+	<select id='selectLogo' resultMap='logoMap'>
+		select * from logos
+		where logo_id = #{logoId}
+	</select>
+	
+	<!--  추가 // 유저 맵에서 uq.logo에서 usercode같은 거 select 되게 하는 펑션
+	<select id='selectUserQuestLogo' resultMap='logoMap'>
+		select i.*
+		from logos i join users_quests uq
+		on i.logo_id = uq.logo_id
+	</select> -->
+	
+	<resultMap id ="logoMap" type="logo">
+      <id     property="logoId" 	column="logo_id"/>
+      <result property="fileName" 	column="file_name"/>
+      <result property="linkUrl" 	column="link_url"/>
+      <result property="altText" 	column="alternate_text"/>
+   </resultMap>
+	
+	
+	<insert id='insertLogo'>
+		insert into logos(logo_id, file_name, link_url, alternate_text)
+        values(logos_logoid_seq.nextval, #{fileName}, #{linkUrl}, #{altText})
+	</insert>
+	
+	<update id='updateLogo'>
+		update logos
+		set file_name = #{fileName}, link_url = #{linkUrl}, alternate_text = #{altText}
+		where logo_id = #{logoId}
+	</update>
+	
+	<delete id='deleteLogo'>
+		delete logos
+		where logo_id = #{logoId}
+	</delete>
+</mapper>

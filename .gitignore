@@ -1,0 +1,7 @@
+/target/
+<<<<<<< HEAD
+=======
+/.classpath
+/.project
+>>>>>>> refs/remotes/origin/master
+/Tomcat v9.0 Server at localhost.launch

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.ClassMap'>
+	<select id='selectClasses' resultMap='classMap'>
+		select * from classes
+		order by class_id
+	</select>
+	<select id='selectInUseCls' resultMap='classMap'>
+		select q.*, c.*
+		from quests q join classes c
+		on q.class_id = c.class_id
+		and q.class_id = #{clsId}
+	</select>
+	<select id='searchClassByMain' resultMap='classMap'>
+		select * from classes
+		where main_category like '%' || #{mainCtg} || '%'
+		order by class_name
+	</select>
+	<select id='searchClassBySub' resultMap='classMap'>
+		select * from classes
+		where sub_category like '%' || #{subCtg} || '%'
+		order by class_name
+	</select>
+	<select id='searchClassByName' resultMap='classMap'>
+		select * from classes
+		where class_name like '%' || #{clsName} || '%'
+		order by class_name
+	</select>
+	<insert id='insertClass'>
+		insert into classes(class_id, main_category, sub_category, class_name)
+        values(clss_clsid_seq.nextval, #{mainCtg}, #{subCtg}, #{clsName})
+	</insert>
+	<delete id='deleteClass'>
+		delete classes cascade
+		where class_id = #{clsId}
+	</delete>
+	<resultMap id ="classMap"		type="class">
+      <id     property="clsId"		column="class_id"/>
+      <result property="mainCtg"	column="main_category"/>
+      <result property="subCtg"		column="sub_category"/>
+      <result property="clsName"	column="class_name"/>
+   </resultMap>
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.UserQuestMap'>
+	<select id="selectUsrQstList" resultMap="userQuestMap">
+		select * from users_quests
+		order by mod_date
+	</select>
+	
+	<!--  -->
+	<!-- user 퀘스트 리스트 -->
+	<select id="selectQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		order by q.quest_id
+	</select>
+	
+	<!-- user 운동 퀘스트 리스트 -->
+	<select id="selectExcQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		and c.main_category = '운동'
+		order by q.quest_id
+	</select>
+	
+	<!-- user 공부 퀘스트 리스트 -->
+	<select id="selectStdQstsForUsr" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usrCode}
+		where uq.proc_step is null
+		and c.main_category = '공부'
+		order by q.quest_id
+	</select>
+	
+	<!-- user 난이도별 퀘스트 검색 -->
+	<select id="selectQstDifficulty" resultMap='questMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usr.usrCode}
+		where uq.proc_step is null
+		and q.difficulty = #{qst.difficulty}
+		order by q.quest_id
+	</select>
+	
+	<!-- user 클래스명 검색 -->
+	<select id='selectQstClsName' resultMap='userQuestMap'>
+		<include refid="selectUsrQsts"/>
+		and uq.user_code = #{usr.usrCode}
+		where uq.proc_step is null
+		and c.class_name like '%' || #{qst.cls.clsName} || '%'
+	</select>
+	
+	<sql id="selectUsrQsts">
+		select q.*, uq.user_code, uq.proc_step, c.*
+		from quests q join classes c
+		on q.class_id = c.class_id
+		left outer join users_quests uq
+		on q.quest_id = uq.quest_id
+	</sql>
+	
+	<!-- user 퀘스트 수락 -->
+	<insert id="addUsrQst">
+		insert into users_quests(user_code, quest_id, proc_step, mod_date, handin_image)
+		values(#{usr.usrCode}, #{qst.qstId}, 'ACCEPTED', sysdate, null)
+	</insert>
+	
+	<!-- 수락한 퀘스트 체크 -->
+	<select id="selectUserQst" resultMap="userQuestMap">
+		select *
+		from users_quests
+		where user_code = #{usr.usrCode}
+		and quest_id = #{qst.qstId}
+	</select>
+	
+	<!-- 퀘스트 포기 -->
+	<delete id='deleteUserQst'>
+		delete users_quests
+		where quest_id = #{qst.qstId}
+	</delete>
+	
+	<!-- admin 수행 중 -->
+	<select id="selectAcptdQstCnt" resultMap="userQuestMap">
+		select * from users_quests
+		where quest_id = #{qstId}
+		and proc_step = 'ACCEPTED'
+	</select>
+	
+	<!-- 퀘스트 수행완료(제출) -->
+	<update id="doUserQuest">
+		update users_quests
+		set proc_step = 'DONE', mod_date = sysdate, handin_image = #{handInImg}
+		where user_code = #{usr.usrCode}
+		and quest_id = #{qst.qstId}
+	</update>
+	
+	<!-- 수행완료 - 사진삭제 -->
+	<update id="updateUserQuestHandInImg">
+		update users_quests
+		set handin_image = null
+		where user_code = #{usr.usrCode}
+		and quest_id = #{qst.qstId}
+	</update>
+	<!--  -->
+	
+	<select id="selectUsrQstListOfUsr" resultMap="userQuestMap">
+		select * from users_quests
+		where user_code = #{usrCode}
+		order by mod_date desc
+	</select>
+	
+	<select id="selectUserQuestsUsr" resultMap="userMap">
+		select * from users
+		where user_code = #{user_code}
+	</select>
+	
+	<select id="selectUserQuestsQst" resultMap="questMap">
+		select * from quests
+		where quest_id = #{quest_id}
+	</select>
+	
+	<select id="selectUserQuestCls" resultMap="classMap">
+		select * from classes
+		where class_id = #{class_id}
+	</select>
+	
+	<resultMap id ="userQuestMap" type="userQuest">
+		<result property="procStep"		column="proc_step"/>
+		<result property="modDate"		column="mod_date"/>
+		<result property="handInImg" 	column="handin_image"/>
+		<association property="usr" column="user_code" select="selectUserQuestsUsr"/>
+		<association property="qst" column="quest_id" select="selectUserQuestsQst"/>
+   </resultMap>
+   
+   <resultMap id="userMap" type="user">
+		<id     property="usrCode" 		column="user_code"/>
+		<result property="position" 	column="position"/>
+		<result property="usrId" 		column="user_id"/>
+		<result property="usrPw" 		column="password"/>
+		<result property="usrName" 		column="user_name"/>
+		<result property="nickname" 	column="nickname"/>
+		<result property="birthday" 	column="birthday"/>
+		<result property="phoneNum" 	column="phone_num"/>
+		<result property="usrLv" 		column="user_level"/>
+		<result property="gold" 		column="gold"/>
+		<result property="regDate" 		column="reg_date"/>
+		<result property="usrIcon"		column="user_icon"/>
+   </resultMap>
+   
+   <resultMap id="questMap" type="quest">
+		<id     property="qstId" 		column="quest_id"/>
+		<result property="qstName" 		column="quest_name"/>
+		<result property="difficulty" 	column="difficulty"/>
+		<result property="qstContent" 	column="quest_content"/>
+		<result property="qstImg"		column="quest_image"/>
+		<association property="cls" column="class_id" select="selectUserQuestCls"/>
+   </resultMap>
+   
+   <resultMap id="classMap" type="class">
+   		<id     property="clsId"	column="class_id"/>
+		<result property="mainCtg"	column="main_category"/>
+		<result property="subCtg"	column="sub_category"/>
+		<result property="clsName"	column="class_name"/>
+   </resultMap>
+   
+	<insert id="insertUserQuest">
+		insert into users_quests(user_code, quest_id, proc_step, mod_date)
+        values(#{usrCode}, #{qstId}, 'ACCEPTED', sysdate)
+	</insert>
+	
+	<update id="doneUserQuest">
+		update users_quests
+		set proc_step = 'DONE', mod_date = sysdate, handin_image = #{handInImg}
+		where user_code = #{usrCode}
+		and quest_id = #{qstId}
+	</update>
+	
+	<update id="deleteUserQuestHandInImg" parameterType="int">
+		update users_quests
+		set handin_image = null
+		where user_code = #{usrCode}
+		and quest_id = #{qstId}
+	</update>
+	
+	<delete id="deleteUserQuestForUnreg" parameterType="int">
+		delete users_quests
+		where user_code = #{usrCode}
+	</delete>
+</mapper>

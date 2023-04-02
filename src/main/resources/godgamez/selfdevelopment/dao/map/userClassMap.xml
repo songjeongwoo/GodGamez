@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EX'
+	'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<mapper namespace='godgamez.selfdevelopment.dao.map.UserClassMap'>
+   <select id="selectUserClasses" resultMap="userClassMap">
+		select * from users_classes
+		where user_code = #{usrCode}
+	</select>
+	
+	<select id='selectClassesForUser' resultMap='classMap'>
+		select c.* from classes c
+		left outer join users_classes uc
+		on c.class_id = uc.class_id
+		and uc.user_code = #{usrCode}
+		where uc.class_id is null
+		order by c.class_id
+	</select>
+	
+	<select id='searchClassByMainForUser' resultMap='classMap'>
+		select c.* from classes c
+		left outer join users_classes uc
+		on c.class_id = uc.class_id
+		and uc.user_code = #{usrCode}
+		where uc.class_id is null
+		and c.main_category like '%' || #{mainCtg} || '%'
+		order by c.class_name
+	</select>
+	
+	<select id='searchClassBySubForUser' resultMap='classMap'>
+		select c.* from classes c
+		left outer join users_classes uc
+		on c.class_id = uc.class_id
+		and uc.user_code = #{usrCode}
+		where uc.class_id is null
+		and c.sub_category like '%' || #{subCtg} || '%'
+		order by c.class_name
+	</select>
+	
+	<select id='searchClassByNameForUser' resultMap='classMap'>
+		select c.* from classes c
+		left outer join users_classes uc
+		on c.class_id = uc.class_id
+		and uc.user_code = #{usrCode}
+		where uc.class_id is null
+		and c.class_name like '%' || #{clsName} || '%'
+		order c.by class_name
+	</select>
+	
+	<select id="selectUserClassesUsr" resultMap="userMap">
+		select * from users
+		where user_code = #{user_code}
+	</select>
+	
+	<select id="selectUserClassesCls" resultMap="classMap">
+		select * from classes
+		where class_id = #{class_id}
+	</select>
+	
+	<resultMap id ="userClassMap" type="userClass">
+		<association property="usr" column="user_code" select="selectUserClassesUsr"/>
+		<association property="cls" column="class_id" select="selectUserClassesCls"/>
+   </resultMap>
+   
+   <resultMap id="userMap" type="user">
+		<id     property="usrCode" 		column="user_code"/>
+		<result property="position" 	column="position"/>
+		<result property="usrId" 		column="user_id"/>
+		<result property="usrPw" 		column="password"/>
+		<result property="usrName" 		column="user_name"/>
+		<result property="nickname" 	column="nickname"/>
+		<result property="birthday" 	column="birthday"/>
+		<result property="phoneNum" 	column="phone_num"/>
+		<result property="usrLv" 		column="user_level"/>
+		<result property="gold" 		column="gold"/>
+		<result property="regDate" 		column="reg_date"/>
+		<result property="usrIcon"		column="user_icon"/>
+   </resultMap>
+   
+   <resultMap id ="classMap" type="class">
+		<id     property="clsId"		column="class_id"/>
+		<result property="mainCtg"		column="main_category"/>
+		<result property="subCtg"		column="sub_category"/>
+		<result property="clsName"		column="class_name"/>
+   </resultMap>
+   
+	<insert id="insertUserClass" parameterType="int">
+		insert into users_classes(user_code, class_id)
+        values(#{usrCode}, #{clsId})
+	</insert>
+	
+	<delete id="deleteUserClass" parameterType="int">
+		delete users_classes
+		where user_code = #{usrCode}
+		and class_id = #{clsId}
+	</delete>
+	
+	<delete id="deleteUserClassForUnreg" parameterType="int">
+		delete users_classes
+		where user_code = #{usrCode}
+	</delete>
+</mapper>
