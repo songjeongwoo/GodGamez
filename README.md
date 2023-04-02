@@ -1,4 +1,4 @@
-<img src="GodGamez/src/main/webapp/res/logo/logo_light.jpg"  width="100%" height="auto%">
+<img src="/src/main/webapp/res/logo/logo_light.jpg"  width="100%" height="auto%">
 
 ## 0. 특이사항
 
